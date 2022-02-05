@@ -1,0 +1,35 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r, setup}
+library(httr)
+library(jsonlite)
+library(tidyverse)
+library(janitor)
+library(skimr)
+```
+
+```{r}
+#' Get data
+#' runs for a couple of minutes or more, depending on your wifi
+res = GET("https://open.canada.ca/data/dataset/4301f4bb-1daa-4b50-afab-d1193b5d2284/resource/63f972a8-8bf2-4584-a735-e5d0c07a9eb6/download/subset-3-sous-ensemble-3.csv")
+
+data <- httr::content(res, 'parsed')
+```
+
+```{r}
+#' Clean data
+
+#' cleaned up column names
+cleaned_names <- janitor::clean_names(data)
+
+# skim data
+cleaned_names %>% skimr::skim()
+```
+
